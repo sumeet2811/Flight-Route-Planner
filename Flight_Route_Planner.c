@@ -3,7 +3,6 @@
 #include <string.h>
 #include <limits.h>
 
-// Structure to represent an edge in the graph
 struct Edge
 {
     int destination;
@@ -11,21 +10,18 @@ struct Edge
     struct Edge *next;
 };
 
-// Structure to represent a vertex in the graph
 struct Vertex
 {
     char city[50];
     struct Edge *edges;
 };
 
-// Structure to represent the graph
 struct Graph
 {
     int numVertices;
     struct Vertex *vertices;
 };
 
-// Function to create a new edge
 struct Edge *createEdge(int destination, int weight)
 {
     struct Edge *newEdge = (struct Edge *)malloc(sizeof(struct Edge));
@@ -35,21 +31,17 @@ struct Edge *createEdge(int destination, int weight)
     return newEdge;
 }
 
-// Function to add an edge to the graph
 void addEdge(struct Graph *graph, int src, int dest, int weight)
 {
-    // Adding edge from src to dest
     struct Edge *newEdge = createEdge(dest, weight);
     newEdge->next = graph->vertices[src].edges;
     graph->vertices[src].edges = newEdge;
 
-    // For an undirected graph, add the reverse edge as well
     newEdge = createEdge(src, weight);
     newEdge->next = graph->vertices[dest].edges;
     graph->vertices[dest].edges = newEdge;
 }
 
-// Function to initialize the graph
 struct Graph *createGraph(int numVertices)
 {
     struct Graph *graph = (struct Graph *)malloc(sizeof(struct Graph));
@@ -65,7 +57,6 @@ struct Graph *createGraph(int numVertices)
     return graph;
 }
 
-// Function to find the minimum distance vertex in the set of vertices not yet included in the shortest path tree
 int minDistance(int dist[], int visited[], int numVertices)
 {
     int min = INT_MAX, min_index;
@@ -77,8 +68,6 @@ int minDistance(int dist[], int visited[], int numVertices)
     return min_index;
 }
 
-// Function to print the shortest path from source to target using Dijkstra's algorithm
-// Function to print the shortest path from source to target using Dijkstra's algorithm
 void shortestPath(struct Graph *graph, int src, int dest)
 {
     int numVertices = graph->numVertices;
@@ -120,7 +109,6 @@ void shortestPath(struct Graph *graph, int src, int dest)
         return;
     }
 
-    // Collect the path in an array
     int path[numVertices];
     int pathLength = 0;
     int current = dest;
@@ -130,7 +118,6 @@ void shortestPath(struct Graph *graph, int src, int dest)
         current = parent[current];
     }
 
-    // Print the path in reverse order
     for (int i = pathLength - 1; i >= 0; i--)
     {
         printf("%s", graph->vertices[path[i]].city);
@@ -144,10 +131,8 @@ void shortestPath(struct Graph *graph, int src, int dest)
 
 int main()
 {
-    int numVertices = 11; // Number of cities
+    int numVertices = 11; 
     struct Graph *graph = createGraph(numVertices);
-
-    // Adding edges with weights
 
     addEdge(graph, 0, 9, 20);
     addEdge(graph, 0, 1, 20);
@@ -166,7 +151,6 @@ int main()
     addEdge(graph, 8, 10, 20);
     addEdge(graph, 10, 9, 20);
 
-    // Setting city names
     strcpy(graph->vertices[0].city, "Panaji");
     strcpy(graph->vertices[1].city, "Bengaluru");
     strcpy(graph->vertices[2].city, "Thiruvananthapuram");
@@ -179,7 +163,6 @@ int main()
     strcpy(graph->vertices[9].city, "Mumbai");
     strcpy(graph->vertices[10].city, "Ahmedabad");
 
-    //Example: Printing the graph
     printf("Choose your source and destination :\n");
     for (int i = 0; i < numVertices; ++i) {
         
@@ -191,7 +174,6 @@ int main()
         printf("\n");
     }
 
-    // Getting source and destination cities from user input
     char sourceCity[50], destCity[50];
     printf("Enter source city: ");
     fgets(sourceCity, sizeof(sourceCity), stdin);
@@ -201,7 +183,6 @@ int main()
     fgets(destCity, sizeof(destCity), stdin);
     destCity[strcspn(destCity, "\n")] = '\0';
 
-    // Finding indices of source and destination cities
     int sourceIndex = -1, destIndex = -1;
     for (int i = 0; i < numVertices; ++i)
     {
@@ -224,7 +205,6 @@ int main()
         printf("City not found in the graph.\n");
     }
 
-    // Free the memory allocated for the graph
     for (int i = 0; i < numVertices; ++i)
     {
         struct Edge *edge = graph->vertices[i].edges;
